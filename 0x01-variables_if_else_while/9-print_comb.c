@@ -5,11 +5,17 @@
  */
 int main(void)
 {
-int i = 0;
-for (i = 10; i < 99; i++)
+int n = 48;
+int com = 44;
+while (n <= 57)
 {
-putchar(i);
-putchar(',');
+putchar(n);
+if (n != 57)
+{
+putchar(com);
+putchar(32);
+}
+n += 1;
 }
 putchar('\n');
 return (0);
