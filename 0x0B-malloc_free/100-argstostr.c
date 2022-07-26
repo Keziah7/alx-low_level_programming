@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "holberton.h"
 /**
  * argstostr - concatenates all the arguments of your program
  * @ac: argument count
