@@ -1,8 +1,4 @@
 #include "lists.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <string.h>
 /**
  * _strlen - Returns the lenght of a string.
  * @s: Type char pointer
