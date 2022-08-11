@@ -1,43 +1,32 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lists.h"
 #include <string.h>
 /**
- * add_node_end - function that adds a new node at the end of a list_t list
- * @head: input header pointer
- * @str: Input string value
- * Return: the address of the new element, or NULL if it failed
+ * add_node - Adds a new node at the beginning of a list.
+ * @head: A pointer to the head of the structure list_t list.
+ * @str: string to be added to the structure list_t list.
+ * Return: If the function fails - NULL.
+ *        Otherwise - Address of the new element.
  */
-list_t *add_node_end(list_t **head, const char *str)
+list_t *add_node(list_t **head, const char *str)
 {
-list_t *node;
-list_t *tmp;
-node = malloc(sizeof(list_t));
-if (node == NULL)
+char *duplicate;
+int length;
+list_t *newptr;
+newptr = malloc(sizeof(list_t));
+if (newptr == NULL)
 return (NULL);
-node->len = _strlen(str);
-node->str = strdup(str);
-node->next = NULL;
-if (*head == NULL)
-*head = node;
-else
+duplicate = strdup(str);
+if (duplicate == NULL)
 {
-tmp = *head;
-while (tmp->next != NULL)
-tmp = tmp->next;
-tmp->next = node;
+free(newptr);
+return (NULL);
 }
-return (node);
-}
-/**
- * _strlen - returns length of string
- * @s: character of string
- * Return: length of string
- */
-int _strlen(const char *s)
-{
-int i;
-while (s[i] != 0)
-i++;
-return (i);
+length = 0;
+while (str[length])
+length++;
+newptr->str = duplicate;
+newptr->len = length;
+newptr->next = *head;
+*head = newptr;
+return (newptr);
 }
