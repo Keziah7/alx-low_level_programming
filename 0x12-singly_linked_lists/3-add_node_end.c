@@ -1,43 +1,48 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lists.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 /**
- * add_node_end - function that adds a new node at the end of a list_t list
- * @head: input header pointer
- * @str: Input string value
- * Return: the address of the new element, or NULL if it failed
- */
-list_t *add_node_end(list_t **head, const char *str)
-{
-list_t *node;
-list_t *tmp;
-node = malloc(sizeof(list_t));
-if (node == NULL)
-return (NULL);
-node->len = _strlen(str);
-node->str = strdup(str);
-node->next = NULL;
-if (*head == NULL)
-*head = node;
-else
-{
-tmp = *head;
-while (tmp->next != NULL)
-tmp = tmp->next;
-tmp->next = node;
-}
-return (node);
-}
-/**
- * _strlen - returns length of string
- * @s: character of string
- * Return: length of string
+ * _strlen - Returns the lenght of a string.
+ * @s: Type char pointer
+ * Return: Always 0.
  */
 int _strlen(const char *s)
 {
-int i;
-while (s[i] != 0)
-i++;
-return (i);
+unsigned int len;
+for (len = 0; s[len] != '\0'; len++)
+{
+}
+return (len);
+}
+/**
+ * add_node_end - Returns the lenght of a string.
+ * @str: Type char pointer
+ * @head: type pointer of struct
+ * Return: new_node.
+ */
+list_t *add_node_end(list_t **head, const char *str)
+{
+list_t *n_node, *tmp_n_d;
+n_node = malloc(sizeof(list_t));
+if (n_node == NULL)
+return (NULL);
+n_node->str = strdup(str);
+n_node->len = _strlen(str);
+n_node->next = NULL;
+if (!*head)
+{
+*head = n_node;
+}
+else
+{
+tmp_n_d = *head;
+while (tmp_n_d->next)
+tmp_n_d = tmp_n_d->next;
+{
+tmp_n_d->next = n_node;
+}
+}
+return (n_node);
 }
