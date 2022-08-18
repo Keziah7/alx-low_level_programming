@@ -1,26 +1,44 @@
-#include <unistd.h>
-#include <limits.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "main.h"
 /**
- * print_binary - print an unsigned int in binary
- * @n:
- * Return: void
+ * _pow_recursion - function that returns the value of x
+ * raised to the power of y
+ * @x: base number
+ * @y: pow number
+ * Return: int
+ */
+int _pow_recursion(int x, int y)
+{
+if (y < 0)
+return (-1);
+if (y == 0)
+return (1);
+return (x * _pow_recursion(x, y - 1));
+}
+/**
+ * print_binary - function that prints the binary representation of a number
+ * @n: decimal number
+ * Return: nothing
  */
 void print_binary(unsigned long int n)
 {
-unsigned long int printbit = 1ul << 63;
-char c = '0';
-while (!(printbit & n) && printbit != 0)
-printbit = printbit >> 1;
-if (printbit == 0)
-write(1, &c, 1);
-while (printbit)
+unsigned int res_pow = 0;
+int exp = 10;
+int flag = 0;
+if (n == 0)
+_putchar('0');
+while (exp >= 0)
 {
-if (printbit & n)
-c = '1';
-else
-c = '0';
-write(1, &c, 1);
-printbit = printbit >> 1;
+res_pow = _pow_recursion(2, exp);
+if (n >= res_pow)
+{
+_putchar('1');
+n -= res_pow;
+flag = 1;
+}
+else if (n < res_pow && flag == 1)
+_putchar('0');
+exp--;
 }
 }
