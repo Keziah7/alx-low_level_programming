@@ -1,14 +1,38 @@
-#include "main.h"
+#include <elf.h>
+
+#include <sys/types.h>
+
+#include <sys/stat.h>
+
+#include <fcntl.h>
+
+#include <unistd.h>
+
+#include <stdio.h>
+
+#include <stdlib.h>
 
 
 
-/*
- *
- *  * File: 100-elf_header.c
- *
- *   * Auth: David Musau (Norman David)
- *
- *    */
+void check_elf(unsigned char *e_ident);
+
+void print_magic(unsigned char *e_ident);
+
+void print_class(unsigned char *e_ident);
+
+void print_data(unsigned char *e_ident);
+
+void print_version(unsigned char *e_ident);
+
+void print_abi(unsigned char *e_ident);
+
+void print_osabi(unsigned char *e_ident);
+
+void print_type(unsigned int e_type, unsigned char *e_ident);
+
+void print_entry(unsigned long int e_entry, unsigned char *e_ident);
+
+void close_elf(int elf);
 
 
 
@@ -28,21 +52,21 @@ void check_elf(unsigned char *e_ident)
 
 {
 
-		int i;
+		int index;
 
 
 
-			for (i = 0; i < 4; i++)
+			for (index = 0; index < 4; index++)
 
 					{
 
-								if (e_ident[i] != 127 &&
+								if (e_ident[index] != 127 &&
 
-												    e_ident[i] != 'E' &&
+													e_ident[index] != 'E' &&
 
-												    		    e_ident[i] != 'L' &&
+																e_ident[index] != 'L' &&
 
-														    		    e_ident[i] != 'F')
+																			e_ident[index] != 'F')
 
 											{
 
@@ -74,7 +98,7 @@ void print_magic(unsigned char *e_ident)
 
 {
 
-		int x;
+		int index;
 
 
 
@@ -82,15 +106,15 @@ void print_magic(unsigned char *e_ident)
 
 
 
-				for (x = 0; x < EI_NIDENT; x++)
+				for (index = 0; index < EI_NIDENT; index++)
 
 						{
 
-									printf("%02x", e_ident[x]);
+									printf("%02x", e_ident[index]);
 
 
 
-											if (x == EI_NIDENT - 1)
+											if (index == EI_NIDENT - 1)
 
 															printf("\n");
 
@@ -214,7 +238,7 @@ void print_version(unsigned char *e_ident)
 
 		printf("  Version:                           %d",
 
-					       e_ident[EI_VERSION]);
+						   e_ident[EI_VERSION]);
 
 
 
@@ -344,7 +368,7 @@ void print_abi(unsigned char *e_ident)
 
 		printf("  ABI Version:                       %d\n",
 
-					       e_ident[EI_ABIVERSION]);
+						   e_ident[EI_ABIVERSION]);
 
 }
 
@@ -442,7 +466,7 @@ void print_entry(unsigned long int e_entry, unsigned char *e_ident)
 
 								e_entry = ((e_entry << 8) & 0xFF00FF00) |
 
-												  ((e_entry >> 8) & 0xFF00FF);
+													  ((e_entry >> 8) & 0xFF00FF);
 
 										e_entry = (e_entry << 16) | (e_entry >> 16);
 
@@ -486,7 +510,9 @@ void close_elf(int elf)
 
 							dprintf(STDERR_FILENO,
 
-												"Error: Can't close fd %d\n", elf);
+													"Error: Can't close fd %d\n", elf);
+
+
 
 									exit(98);
 
@@ -524,13 +550,13 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 
 		Elf64_Ehdr *header;
 
-			int fd, s;
+			int o, r;
 
 
 
-				fd = open(argv[1], O_RDONLY);
+				o = open(argv[1], O_RDONLY);
 
-					if (fd == -1)
+					if (o == -1)
 
 							{
 
@@ -546,7 +572,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 
 									{
 
-												close_elf(fd);
+												close_elf(o);
 
 														dprintf(STDERR_FILENO, "Error: Can't read file %s\n", argv[1]);
 
@@ -554,15 +580,15 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 
 																	}
 
-								s = read(fd, header, sizeof(Elf64_Ehdr));
+								r = read(o, header, sizeof(Elf64_Ehdr));
 
-									if (s == -1)
+									if (r == -1)
 
 											{
 
 														free(header);
 
-																close_elf(fd);
+																close_elf(o);
 
 																		dprintf(STDERR_FILENO, "Error: `%s`: No such file\n", argv[1]);
 
@@ -596,10 +622,8 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 
 																				free(header);
 
-																					close_elf(fd);
+																					close_elf(o);
 
 																						return (0);
 
 }
-
-
